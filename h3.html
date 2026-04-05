@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thiệp Cưới - Tường Vy & Gia Bảo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #FEF8F5;
+            --primary-color: #A36B4F;
+            --accent-color: #E29578;
+            --text-color: #4A4A4A;
+            --card-bg: #FFFFFF;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at top, #FFF0E5 0%, #FCEADE 40%, #F5D5C6 100%);
+            font-family: 'Quicksand', sans-serif;
+            color: var(--text-color);
+            padding: 20px 0;
+            box-sizing: border-box;
+        }
+
+        .invitation {
+            width: min(800px, 95vw);
+            background: var(--card-bg);
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(163, 107, 79, 0.15);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* --- 1. HERO SECTION (BÌA THIỆP) --- */
+        .hero-card {
+            padding: 4rem 2rem 3rem;
+            text-align: center;
+            background: linear-gradient(to bottom, #FFFBF9, #FFF0E5);
+            border-bottom: 1px solid rgba(163, 107, 79, 0.1);
+        }
+
+        .hero-card .title {
+            font-size: 1.1rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero-card .name {
+            font-size: clamp(3rem, 7vw, 4.5rem);
+            color: var(--primary-color);
+            font-family: 'Great Vibes', cursive;
+            line-height: 1.2;
+            margin: 0.5rem 0;
+        }
+
+        .hero-card .ampersand {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            font-family: 'Great Vibes', cursive;
+        }
+
+        /* --- 2. LỜI MỜI & GIA ĐÌNH --- */
+        .greeting-section {
+            padding: 3rem 2rem 2rem;
+            text-align: center;
+        }
+
+        .label {
+            font-size: 0.9rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent-color);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .main-title {
+            font-size: clamp(2rem, 4vw, 2.5rem);
+            color: var(--primary-color);
+            font-weight: 700;
+            margin: 0.5rem 0 1.5rem;
+            letter-spacing: 0.1em;
+        }
+
+        .invitation-text {
+            max-width: 550px;
+            margin: 0 auto 2.5rem;
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #666;
+        }
+
+        .family-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .family-card {
+            background: #FFFAF7;
+            border: 1px solid rgba(163, 107, 79, 0.15);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .family-card p {
+            margin: 0.3rem 0;
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .family-card .role {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.6rem;
+        }
+
+        .family-card .parent-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 1.05rem;
+        }
+
+        /* --- 3. MỚI: LỄ THÀNH HÔN & TIỆC MỪNG --- */
+        .timeline-section {
+            background: #FFF9F6;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        /* Phần Lễ Thành Hôn */
+        .ceremony-box {
+            margin-bottom: 3rem;
+        }
+
+        .time-text {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+
+        .date-display {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .date-display .month-year {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .date-display .day-large {
+            font-size: 3.5rem;
+            font-family: 'Great Vibes', cursive;
+            color: var(--primary-color);
+            line-height: 1;
+        }
+
+        .date-divider {
+            width: 1px;
+            height: 40px;
+            background-color: rgba(163, 107, 79, 0.3);
+        }
+
+        .lunar-date {
+            font-style: italic;
+            color: #777;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .location-text {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1.05rem;
+        }
+
+        /* Phần Tiệc Mừng (Khung Bo tròn) */
+        .party-box {
+            max-width: 500px;
+            margin: 0 auto;
+            border: 1.5px solid var(--accent-color);
+            border-radius: 20px;
+            padding: 2rem 1.5rem;
+            background-color: #FFFFFF;
+            box-shadow: 0 10px 25px rgba(226, 149, 120, 0.08);
+        }
+
+        .party-box .main-title {
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .party-box .party-date {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            letter-spacing: 0.1em;
+            margin: 0.5rem 0;
+        }
+
+        /* --- 4. MỚI: SAVE THE DATE (LỊCH TỰ ĐỘNG) --- */
+        .calendar-section {
+            padding: 3.5rem 2rem;
+            text-align: center;
+            background-color: #FFFFFF;
+        }
+
+        .calendar-section .label {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.5rem;
+            text-transform: none;
+            letter-spacing: normal;
+            margin-bottom: 0;
+        }
+
+        .calendar-section h3 {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--primary-color);
+            margin: 0.2rem 0 2rem;
+        }
+
+        .calendar-container {
+            max-width: 350px;
+            margin: 0 auto;
+            background: #FFFAF7;
+            padding: 1.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(163, 107, 79, 0.1);
+        }
+
+        /* Lưới lịch */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-size: 0.9rem;
+            row-gap: 0.8rem;
+        }
+
+        .calendar-grid span {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 35px;
+            width: 35px;
+            margin: auto;
+            color: #555;
+            font-weight: 600;
+        }
+
+        /* Tiêu đề thứ trong tuần */
+        .calendar-grid .day-header {
+            color: var(--primary-color);
+            font-weight: 700;
+            border-bottom: 1px solid rgba(163, 107, 79, 0.2);
+            padding-bottom: 5px;
+        }
+
+        /* Ô ngày cưới (Trái tim hồng) */
+        .calendar-grid .wedding-day {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FCEADE'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            color: var(--primary-color);
+            font-weight: 700;
+            position: relative;
+        }
+
+        /* --- 5. GALLERY (GIỮ NGUYÊN) --- */
+        .gallery-section {
+            padding: 3rem 2rem;
+            background-color: #FFF9F6;
+        }
+
+        .gallery-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .gallery-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .gallery-controls button {
+            border: none;
+            border-radius: 999px;
+            padding: 0.6rem 1rem;
+            background: #FFF0E5;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .gallery-controls button:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .slides {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            background: #fff;
+            min-height: 300px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.6s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: scale(1);
+            position: relative;
+        }
+
+        .slide img {
+            width: 100%;
+            height: auto;
+            max-height: 450px;
+            object-fit: cover;
+            border-radius: 16px;
+        }
+
+        .thumbs {
+            margin-top: 1rem;
+            display: flex;
+            gap: 0.6rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .thumbs button {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            background: #FFF0E5;
+            overflow: hidden;
+            cursor: pointer;
+            padding: 0;
+            transition: all 0.2s;
+        }
+
+        .thumbs button.active {
+            border-color: var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        .thumbs img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Footer Note */
+        .footer-note {
+            padding: 2.5rem 2rem;
+            text-align: center;
+            background: linear-gradient(to top, #FFFBF9, #FFF0E5);
+            font-size: 0.95rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            border-top: 1px solid rgba(163, 107, 79, 0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            .family-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+
+        .hearts {
+            position: fixed;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="invitation">
+
+        <div class="hero-card">
+            <div class="title">The Wedding Of</div>
+            <div class="name">Tường Vy</div>
+            <div class="ampersand">&amp;</div>
+            <div class="name">Gia Bảo</div>
+        </div>
+
+        <div class="greeting-section">
+            <div class="label">Trân trọng kính mời</div>
+            <p class="invitation-text">
+                Sự hiện diện của quý khách là niềm vinh hạnh lớn cho gia đình chúng tôi. Xin vui lòng đến dự buổi lễ
+                trang trọng và chung vui cùng hai họ.
+            </p>
+
+            <div class="family-grid">
+                <div class="family-card">
+                    <div class="role">Nhà Gái</div>
+                    <p class="parent-name">Trương Minh Thanh</p>
+                    <p class="parent-name">Dương Thị Mỹ Yến</p>
+                    <p>Tổ 3 - K. Phước Trạch</p>
+                    <p>P. Hội An Đông - Tp. Đà Nẵng</p>
+                </div>
+                <div class="family-card">
+                    <div class="role">Nhà Trai</div>
+                    <p class="parent-name">Nguyễn Văn Trung</p>
+                    <p class="parent-name">Đinh Thị Hà</p>
+                    <p>Tiểu Khu 1 - Xã Mai Châu</p>
+                    <p>Tỉnh Phú Thọ</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-section">
+
+            <div class="ceremony-box">
+                <div class="main-title">LỄ THÀNH HÔN</div>
+                <div class="time-text">Vào Lúc 14:00 | Chủ Nhật</div>
+                <div class="date-display">
+                    <div class="month-year">Tháng 12</div>
+                    <div class="date-divider"></div>
+                    <div class="day-large">14</div>
+                    <div class="date-divider"></div>
+                    <div class="month-year">2025</div>
+                </div>
+                <div class="lunar-date">(Tức Ngày 25 Tháng 10 Năm Ất Tỵ)</div>
+                <div class="location-text">Tại Tư Gia Nhà Trai</div>
+            </div>
+
+            <div class="party-box">
+                <div class="main-title">TIỆC MỪNG LỄ THÀNH HÔN</div>
+                <div class="time-text">18:00 - Chủ Nhật</div>
+                <div class="party-date">14.12.2025</div>
+                <div class="lunar-date">(Tức Ngày 25 Tháng 10 Năm Ất Tỵ)</div>
+                <div class="location-text">Tại Adora Center – Phú Nhuận</div>
+            </div>
+        </div>
+
+        <div class="calendar-section">
+            <div class="label">Save the date</div>
+            <h3 id="calendarTitle">THÁNG 12 - 2025</h3>
+
+            <div class="calendar-container">
+                <div class="calendar-grid" id="calendarGrid">
+                </div>
+            </div>
+        </div>
+
+        <div class="gallery-section">
+            <div class="gallery-header">
+                <h2>Kỷ Niệm Của Chúng Tôi</h2>
+                <div class="gallery-controls">
+                    <button id="prevBtn" type="button">‹ Trước</button>
+                    <button id="nextBtn" type="button">Sau ›</button>
+                    <button id="randomBtn" type="button">Ngẫu nhiên</button>
+                </div>
+            </div>
+
+            <div class="slides" id="slides">
+                <div class="slide active"><img
+                        src="https://d1kiuhmnc3a29.cloudfront.net/uploads/6a08410d-f169-4da2-9aa7-d56451ff9c8a.webp"
+                        alt="Ảnh cưới 1"></div>
+                <div class="slide"><img src="https://chungdoi.com/images/themes/chibi_red/couple-main.webp"
+                        alt="Ảnh cưới 2"></div>
+                <div class="slide"><img src="https://chungdoi.com/images/themes/chibi_red/cherry-blossom.webp"
+                        alt="Ảnh cưới 3"></div>
+                <div class="slide"><img src="https://chungdoi.com/images/themes/chibi_red/decorative-header.webp"
+                        alt="Ảnh cưới 4"></div>
+            </div>
+
+            <div class="thumbs" id="thumbs"></div>
+        </div>
+
+        <div class="footer-note">
+            Rất mong được đón tiếp quý khách trong ngày vui trọng đại của chúng tôi!
+        </div>
+    </div>
+
+    <div class="hearts" id="hearts"></div>
+
+    <script>
+        // --- CẤU HÌNH LỊCH TỰ ĐỘNG Ở ĐÂY ---
+        const WEDDING_YEAR = 2026; // (Năm 2026)
+        const WEDDING_MONTH = 4; // (Tháng 4)
+        const WEDDING_DAY = 15; // (Ngày 15)
+
+        function buildCalendar(year, month, weddingDay) {
+            const grid = document.getElementById('calendarGrid');
+            const title = document.getElementById('calendarTitle');
+
+            // Cập nhật tiêu đề lịch
+            title.textContent = `THÁNG ${month} - ${year}`;
+
+            // Tạo các thứ tự T2 đến CN
+            const weekdays = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
+            let html = weekdays.map(day => `<span class="day-header">${day}</span>`).join('');
+
+            // Lấy ngày đầu tiên của tháng rơi vào thứ mấy
+            // JS tính 0 = Chủ nhật, 1 = Thứ hai...
+            let firstDayIndex = new Date(year, month - 1, 1).getDay();
+
+            // Quy đổi để T2 là ô đầu tiên (index = 0) thay vì Chủ nhật
+            // Nếu là CN (0) thì chuyển thành 6, còn lại trừ đi 1.
+            let emptySlots = firstDayIndex === 0 ? 6 : firstDayIndex - 1;
+
+            // Số ngày trong tháng
+            const daysInMonth = new Date(year, month, 0).getDate();
+
+            // Thêm các ô trống ở đầu tháng
+            for (let i = 0; i < emptySlots; i++) {
+                html += `<span></span>`;
+            }
+
+            // Thêm các ngày trong tháng
+            for (let day = 1; day <= daysInMonth; day++) {
+                if (day === weddingDay) {
+                    html += `<span class="wedding-day">${day}</span>`; // Đánh dấu ngày cưới
+                } else {
+                    html += `<span>${day}</span>`;
+                }
+            }
+
+            grid.innerHTML = html;
+        }
+
+        // Chạy hàm tạo lịch
+        buildCalendar(WEDDING_YEAR, WEDDING_MONTH, WEDDING_DAY);
+
+
+        // --- CODE JS CHO GALLERY (GIỮ NGUYÊN) ---
+        const slides = Array.from(document.querySelectorAll('.slide'));
+        const thumbs = document.getElementById('thumbs');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const randomBtn = document.getElementById('randomBtn');
+        let current = 0;
+        let interval = null;
+
+        function renderThumbs() {
+            thumbs.innerHTML = slides.map((slide, index) => `
+                <button type="button" class="thumb-button ${index === current ? 'active' : ''}" data-index="${index}">
+                    <img src="${slide.querySelector('img').src}" alt="Thumb ${index}">
+                </button>
+            `).join('');
+
+            thumbs.querySelectorAll('.thumb-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    goTo(Number(button.dataset.index));
+                    resetAutoPlay();
+                });
+            });
+        }
+
+        function updateThumbs() {
+            thumbs.querySelectorAll('.thumb-button').forEach((button, index) => {
+                button.classList.toggle('active', index === current);
+            });
+        }
+
+        function showSlide(index) {
+            slides.forEach((slide, idx) => slide.classList.toggle('active', idx === index));
+            current = index;
+            updateThumbs();
+        }
+
+        function goTo(index) {
+            const nextIndex = (index + slides.length) % slides.length;
+            showSlide(nextIndex);
+        }
+
+        function nextSlide() { goTo(current + 1); }
+        function prevSlide() { goTo(current - 1); }
+        function randomSlide() {
+            let nextIndex = Math.floor(Math.random() * slides.length);
+            while (nextIndex === current && slides.length > 1) {
+                nextIndex = Math.floor(Math.random() * slides.length);
+            }
+            showSlide(nextIndex);
+        }
+
+        function resetAutoPlay() {
+            clearInterval(interval);
+            interval = setInterval(nextSlide, 4500);
+        }
+
+        renderThumbs();
+        resetAutoPlay();
+
+        prevBtn.addEventListener('click', () => { prevSlide(); resetAutoPlay(); });
+        nextBtn.addEventListener('click', () => { nextSlide(); resetAutoPlay(); });
+        randomBtn.addEventListener('click', () => { randomSlide(); resetAutoPlay(); });
+
+        // Tạo tim bay khi click
+        function createHearts(e) {
+            const heartsContainer = document.getElementById('hearts');
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '❤️';
+                heart.style.left = e.clientX + 'px';
+                heart.style.top = e.clientY + 'px';
+                heartsContainer.appendChild(heart);
+
+                const dirX = (Math.random() - 0.5) * 5;
+                const dirY = (Math.random() - 0.5) * 5;
+                let progress = 0;
+
+                const animate = () => {
+                    progress += 0.02;
+                    if (progress > 1) { heart.remove(); return; }
+                    heart.style.transform = `translate(${dirX * 150 * progress}px, ${dirY * 150 * progress}px) scale(${1 - progress})`;
+                    heart.style.opacity = 1 - progress;
+                    requestAnimationFrame(animate);
+                };
+                animate();
+            }
+        }
+        document.addEventListener('click', (e) => {
+            if (e.target.tagName !== 'BUTTON' && e.target.tagName !== 'IMG') {
+                createHearts(e);
+            }
+        });
+    </script>
+</body>
+
+</html>

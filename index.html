@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thiệp Cưới</title>
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #FEF0E0;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            perspective: 1200px;
+        }
+
+        /* CARD - Tự co giãn cho mobile */
+        .card {
+            width: 90%;
+            max-width: 420px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, .15);
+            text-align: center;
+            padding: 40px 20px;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            position: absolute;
+            opacity: 1;
+            z-index: 5;
+            box-sizing: border-box;
+        }
+
+        .card.flip {
+            transform: rotateY(90deg) scale(0.8);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .names span {
+            display: block;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #d6206a;
+            margin-bottom: 5px;
+        }
+
+        .button-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 14px 28px;
+            background: #ff7bac;
+            color: white;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 123, 172, 0.4);
+        }
+
+        .button-link:hover {
+            background: #d6206a;
+            transform: translateY(-3px);
+        }
+
+        /* ENVELOPE (PHONG BÌ) */
+        .envelope {
+            position: relative;
+            width: 90%;
+            max-width: 360px;
+            height: 240px;
+            background: #eed1be;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1;
+        }
+
+        .envelope.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .flap {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #e4af93;
+            clip-path: polygon(0 0, 100% 0, 50% 60%);
+            transform-origin: top;
+            transition: transform 0.6s ease;
+            z-index: 3;
+        }
+
+        .envelope.open .flap {
+            transform: rotateX(180deg);
+            z-index: 0;
+        }
+
+        .envelope-front {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #f6d6c2;
+            clip-path: polygon(0 35%, 50% 65%, 100% 35%, 100% 100%, 0 100%);
+            z-index: 2;
+        }
+
+        /* LETTER (LÁ THƯ) */
+        .letter {
+            position: absolute;
+            width: 90%;
+            height: 180px;
+            background: white;
+            left: 5%;
+            bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            z-index: 1;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+        }
+
+        .envelope.showLetter .letter {
+            transform: translateY(-130px);
+        }
+
+        /* HIỆU ỨNG TIM BÙNG NỔ */
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 24px;
+            color: #ff4d79;
+        }
+
+        /* HIỆU ỨNG KIM TUYẾN RƠI (GLITTER) */
+        .glitter-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+            /* Nằm dưới thiệp nhưng trên nền */
+        }
+
+        .glitter {
+            position: absolute;
+            border-radius: 50%;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-10px) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(105vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="glitter-container" id="glitterContainer"></div>
+
+    <div class="card" id="card">
+        <div class="names">
+            <span>Anh</span>
+            <span>Em</span>
+        </div>
+        <h2>Thiệp Cưới</h2>
+        <p>Nhấn nút để mở thiệp cưới</p>
+        <a href="#" class="button-link" id="openBtn">Mở thiệp cưới</a>
+    </div>
+
+    <div class="envelope" id="envelope">
+        <div class="flap"></div>
+        <div class="letter">
+            Tường Vy ❤️ Gia Bảo
+        </div>
+        <div class="envelope-front"></div>
+    </div>
+
+    <div class="hearts" id="hearts"></div>
+
+    <script>
+        const openBtn = document.getElementById("openBtn");
+        const card = document.getElementById("card");
+        const envelope = document.getElementById("envelope");
+        const heartsContainer = document.getElementById("hearts");
+        const glitterContainer = document.getElementById("glitterContainer");
+
+        /* 1. Tạo hiệu ứng Kim Tuyến rơi liên tục */
+        const colors = ['#FFD700', '#FFC0CB', '#FFFFFF', '#FFE4E1', '#FF69B4']; // Vàng, Hồng, Trắng
+
+        function createGlitter() {
+            const glitterCount = 50; // Số lượng hạt kim tuyến trên màn hình
+
+            for (let i = 0; i < glitterCount; i++) {
+                setTimeout(() => {
+                    const glitter = document.createElement("div");
+                    glitter.className = "glitter";
+
+                    // Kích thước ngẫu nhiên từ 3px đến 8px
+                    const size = Math.random() * 5 + 3;
+                    glitter.style.width = size + "px";
+                    glitter.style.height = size + "px";
+
+                    // Vị trí ngang ngẫu nhiên
+                    glitter.style.left = Math.random() * 100 + "vw";
+
+                    // Màu sắc ngẫu nhiên trong danh sách
+                    glitter.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+                    // Thời gian rơi ngẫu nhiên từ 4s đến 8s
+                    glitter.style.animationDuration = (Math.random() * 4 + 4) + "s";
+
+                    // Delay ngẫu nhiên để các hạt không rơi cùng lúc
+                    glitter.style.animationDelay = (Math.random() * 5) + "s";
+
+                    // Hiệu ứng lấp lánh (mờ/rõ)
+                    if (Math.random() > 0.5) {
+                        glitter.style.boxShadow = `0 0 ${size}px ${glitter.style.background}`;
+                    }
+
+                    glitterContainer.appendChild(glitter);
+
+                    // Khi rơi hết thì tạo lại hạt mới để rơi vô hạn
+                    glitter.addEventListener('animationend', () => {
+                        glitter.remove();
+                        createSingleGlitter();
+                    });
+                }, i * 100);
+            }
+        }
+
+        // Hàm bổ trợ tạo 1 hạt đơn lẻ sau khi có hạt cũ rơi hết
+        function createSingleGlitter() {
+            const glitter = document.createElement("div");
+            glitter.className = "glitter";
+            const size = Math.random() * 5 + 3;
+            glitter.style.width = size + "px";
+            glitter.style.height = size + "px";
+            glitter.style.left = Math.random() * 100 + "vw";
+            glitter.style.background = colors[Math.floor(Math.random() * colors.length)];
+            glitter.style.animationDuration = (Math.random() * 4 + 4) + "s";
+
+            if (Math.random() > 0.5) {
+                glitter.style.boxShadow = `0 0 ${size}px ${glitter.style.background}`;
+            }
+
+            glitterContainer.appendChild(glitter);
+            glitter.addEventListener('animationend', () => {
+                glitter.remove();
+                createSingleGlitter();
+            });
+        }
+
+        // Chạy hiệu ứng kim tuyến ngay khi vừa tải trang
+        createGlitter();
+
+
+        /* 2. Logic xử lý mở thiệp (Giữ nguyên từ bản trước) */
+        openBtn.onclick = (e) => {
+            e.preventDefault();
+            createHearts(e);
+
+            card.classList.add("flip");
+
+            setTimeout(() => {
+                envelope.classList.add("show");
+            }, 600);
+
+            setTimeout(() => {
+                envelope.classList.add("open");
+            }, 1500);
+
+            setTimeout(() => {
+                envelope.classList.add("showLetter");
+            }, 2200);
+
+            setTimeout(() => {
+                window.location.href = "h2.html";
+            }, 4500);
+        }
+
+        /* 3. Hiệu ứng nổ tim (Giữ nguyên) */
+        function createHearts(e) {
+            const x = e.clientX;
+            const y = e.clientY;
+
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement("div");
+                heart.className = "heart";
+                heart.innerHTML = "❤";
+
+                heart.style.left = x + "px";
+                heart.style.top = y + "px";
+
+                heartsContainer.appendChild(heart);
+
+                const angle = Math.random() * Math.PI * 2;
+                const radius = 60 + Math.random() * 60;
+
+                const tx = Math.cos(angle) * radius;
+                const ty = Math.sin(angle) * radius - 40;
+
+                heart.animate([
+                    { transform: "translate(0,0) scale(0.5)", opacity: 1 },
+                    { transform: `translate(${tx}px,${ty}px) scale(1.2)`, opacity: 0 }
+                ], { duration: 1000, easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)' });
+
+                setTimeout(() => heart.remove(), 1000);
+            }
+        }
+    </script>
+
+</body>
+
+</html>
