@@ -272,6 +272,24 @@
             background-repeat: no-repeat;
             background-position: center;
             color: var(--primary-color);
+            animation: heartBeat 1.6s infinite ease-in-out;
+        }
+
+        @keyframes heartBeat {
+            0% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 0px rgba(255, 150, 170, 0.4));
+            }
+
+            50% {
+                transform: scale(1.15);
+                filter: drop-shadow(0 0 8px rgba(255, 150, 170, 0.7));
+            }
+
+            100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 0px rgba(255, 150, 170, 0.4));
+            }
         }
 
         .map-container {
@@ -473,6 +491,32 @@
         .scroll-btn.show {
             opacity: 1;
             pointer-events: auto;
+        }
+
+        .couple-img-item {
+            opacity: 0;
+            transition: all 3s ease;
+        }
+
+        /* Ảnh bên trái */
+        .couple-img-item:nth-child(1) {
+            transform: translateX(-60px);
+        }
+
+        /* Ảnh giữa */
+        .couple-img-item:nth-child(2) {
+            transform: scale(0.8);
+        }
+
+        /* Ảnh bên phải */
+        .couple-img-item:nth-child(3) {
+            transform: translateX(60px);
+        }
+
+        /* Khi xuất hiện */
+        .couple-img-item.show {
+            opacity: 1;
+            transform: translateX(0) scale(1);
         }
 
         @keyframes rotateMusic {
@@ -720,7 +764,7 @@
     <div class="fixed-btn music-btn" id="musicBtn">🎵</div>
     <div class="fixed-btn scroll-btn" id="scrollTopBtn">↑</div>
 
-    <audio id="bgMusic" loop></audio>
+    <audio id="bgMusic"></audio>
     <div class="hearts" id="hearts"></div>
 
     <script>
@@ -745,9 +789,23 @@
             "https://i.ibb.co/dJm5QZgv/b4.jpg",
         ];
 
+        const coupleImages = document.querySelectorAll(".couple-img-item");
+
+        const observer1 = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("show");
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        coupleImages.forEach(img => observer1.observe(img));
+
         // --- CẤU HÌNH NHẠC ---
         const MUSIC_LIST = [
-            // "https://stream.nct.vn/Sony_Audio118/EmDongYIDo-DucPhucx911-9034315.mp3?st=eWv7ds1DweuEVRA15rxVZQ&e=1775996944&a=6&p=0&r=eab29dfacde6058a08e28133287c4d54%22,%22https://statics.pancake.vn/web-media/5e/ee/bf/4a/afa10d3bdf98ca17ec3191ebbfd3c829d135d06939ee1f1b712d731d-w:0-h:0-l:2938934-t:audio/mpeg.mp3",
+            "https://thanhji123.github.io/profile/nhac/em_dong_y.mp3",
             "https://statics.pancake.vn/web-media/5e/ee/bf/4a/afa10d3bdf98ca17ec3191ebbfd3c829d135d06939ee1f1b712d731d-w:0-h:0-l:2938934-t:audio/mpeg.mp3",
             // "https://www.chosic.com/wp-content/uploads/2021/07/Beautiful-Piano.mp3", // Link dự phòng ổn định
             // "https://statics.pancake.vn/web-media/5e/ee/bf/4a/afa10d3bdf98ca17ec3191ebbfd3c829d135d06939ee1f1b712d731d-w:0-h:0-l:2938934-t:audio/mpeg.mp3"
@@ -756,14 +814,13 @@
         let isPlaying = false;
         const bgMusic = document.getElementById('bgMusic');
         const musicBtn = document.getElementById('musicBtn');
+        let currentMusicIndex = 0;
 
         // Hàm phát nhạc
         function playMusic() {
             // Chỉ gán nguồn nếu chưa có
-            if (!bgMusic.src) {
-                bgMusic.src = MUSIC_LIST[0];
-            }
-
+            bgMusic.src = MUSIC_LIST[currentMusicIndex];
+            bgMusic.volume = 0.5;
             bgMusic.play().then(() => {
                 isPlaying = true;
                 musicBtn.textContent = '🎵';
@@ -789,16 +846,30 @@
             document.addEventListener(evt, initMusic, { once: true });
         });
 
+        bgMusic.addEventListener("ended", () => {
+            currentMusicIndex++;
+
+            if (currentMusicIndex >= MUSIC_LIST.length) {
+                currentMusicIndex = 0; // quay lại bài đầu
+            }
+
+            playMusic();
+        });
+
         // Xử lý riêng cho nút Bật/Tắt nhạc thủ công
         musicBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Ngăn sự kiện lan ra ngoài
+            e.stopPropagation();
+
             if (isPlaying) {
                 bgMusic.pause();
                 musicBtn.textContent = '🔇';
                 musicBtn.classList.remove('rotating');
             } else {
-                playMusic();
+                bgMusic.play();
+                musicBtn.textContent = '🎵';
+                musicBtn.classList.add('rotating');
             }
+
             isPlaying = !isPlaying;
         });
 
