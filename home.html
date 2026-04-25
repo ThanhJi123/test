@@ -1076,13 +1076,6 @@
             "./anh/DSC_16.jpg",
             "./anh/DSC_17.jpg",
             "./anh/DSC_18.jpg",
-            "./anh/DSC_8.jpg",
-            "./anh/DSC_9.jpg",
-            "./anh/DSC_1.jpg",
-            "./anh/DSC_2.jpg",
-            "./anh/DSC_5.jpg",
-            "./anh/DSC_6.jpg",
-            "./anh/DSC_7.jpg",
         ];
         const ALL_IMAGE = [
             "./anh/DSC_3.jpg",
@@ -1119,12 +1112,25 @@
         const bgMusic = document.getElementById('bgMusic');
         const musicBtn = document.getElementById('musicBtn');
         let currentMusicIndex = 0;
+        let musicReady = false;
+
+        // Preload nhạc ngay từ đầu (song song với ảnh, không chờ)
+        function preloadMusic() {
+            bgMusic.src = MUSIC_LIST[currentMusicIndex];
+            bgMusic.volume = 0.5;
+            bgMusic.preload = 'auto';
+            musicReady = true;
+            console.log("✓ Nhạc đã được preload");
+        }
+
+        // Gọi preload ngay lập tức khi script load (không chờ ảnh)
+        preloadMusic();
 
         // Hàm phát nhạc
         function playMusic() {
-            // Chỉ gán nguồn nếu chưa có
-            bgMusic.src = MUSIC_LIST[currentMusicIndex];
-            bgMusic.volume = 0.5;
+            if (!musicReady) {
+                preloadMusic();
+            }
             bgMusic.play().then(() => {
                 isPlaying = true;
                 musicBtn.textContent = '🎵';
@@ -1157,7 +1163,12 @@
                 currentMusicIndex = 0; // quay lại bài đầu
             }
 
-            playMusic();
+            // Preload bài tiếp theo ngay (không chờ)
+            bgMusic.src = MUSIC_LIST[currentMusicIndex];
+            bgMusic.load(); // Trigger load
+
+            // Phát bài tiếp theo sau khi preload
+            bgMusic.play();
         });
 
         // Xử lý riêng cho nút Bật/Tắt nhạc thủ công
