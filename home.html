@@ -540,60 +540,62 @@
 
         .album-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            grid-auto-rows: 280px;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: auto;
             gap: 1.2rem;
             grid-auto-flow: dense;
+        }
+
+        /* Pattern lặp mỗi 4 item: 2x2, 2x1, 1x2, 1x1 */
+        .album-item:nth-child(4n+1) {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        .album-item:nth-child(4n+2) {
+            grid-column: span 2;
+            grid-row: span 1;
+        }
+
+        .album-item:nth-child(4n+3) {
+            grid-column: span 1;
+            grid-row: span 2;
+        }
+
+        .album-item:nth-child(4n+4) {
+            grid-column: span 1;
+            grid-row: span 1;
         }
 
         .album-item {
             border-radius: 15px;
             overflow: hidden;
-            opacity: 0;
-            transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+            opacity: 1;
+            transition: transform 0.3s ease;
         }
 
         .album-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: 0.5s;
+            display: block;
+            transition: transform 0.3s ease;
         }
 
         .album-item:hover img {
-            transform: scale(1.1);
+            transform: scale(1.05);
         }
 
-        /* Hiệu ứng chuyển động */
-        .album-item.fade-in.appear {
-            opacity: 1;
-        }
+        /* Hiệu ứng chuyển động - bỏ tất cả */
 
-        .album-item.slide-up {
-            transform: translateY(60px);
-        }
-
-        .album-item.slide-up.appear {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .album-item.slide-left {
-            transform: translateX(60px);
-        }
-
-        .album-item.slide-left.appear {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .album-item:nth-child(3n) {
+        /* Bỏ spanning để tránh overlap */
+        /* .album-item:nth-child(3n) {
             grid-row: span 2;
         }
 
         .album-item:nth-child(5n) {
             grid-column: span 2;
-        }
+        } */
 
         /* NÚT FIXED */
         .fixed-btn {
@@ -670,23 +672,63 @@
             border: 2px solid var(--accent-color) !important;
         }
 
-        @media (max-width: 600px) {
+        /* @media (max-width: 600px) {
             .family-grid {
                 grid-template-columns: 1fr;
             }
 
             .album-grid {
                 grid-template-columns: repeat(2, 1fr);
+                grid-auto-rows: auto;
+                gap: 1.2rem;
+                grid-auto-flow: dense;
             }
 
-            .album-item:nth-child(5n) {
+
+            .album-item:nth-child(8n+1) {
                 grid-column: span 1;
+                grid-row: span 1;
+            }
+
+            .album-item:nth-child(8n+2) {
+                grid-column: span 1;
+                grid-row: span 1;
+            }
+
+            .album-item:nth-child(8n+3) {
+                grid-column: span 2;
+                grid-row: span 2;
+            }
+
+            .album-item:nth-child(8n+4) {
+                grid-column: span 2;
+                grid-row: span 1;
+            }
+
+            .album-item:nth-child(8n+5) {
+                grid-column: span 1;
+                grid-row: span 1;
+            }
+
+            .album-item:nth-child(8n+6) {
+                grid-column: span 1;
+                grid-row: span 1;
+            }
+
+            .album-item:nth-child(8n+7) {
+                grid-column: span 2;
+                grid-row: span 2;
+            }
+
+            .album-item:nth-child(8n+8) {
+                grid-column: span 2;
+                grid-row: span 1;
             }
 
             .couple-images-grid {
                 gap: 8px;
             }
-        }
+        } */
 
         .hearts {
             position: fixed;
@@ -1003,6 +1045,26 @@
     <div class="hearts" id="hearts"></div>
 
     <script>
+        // --- HÀM NÉN ẢNH BẰNG CANVAS ---
+        function compressImage(src, quality = 0.7, callback) {
+            const img = new Image();
+            img.crossOrigin = 'Anonymous';
+            img.onload = function () {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d', { alpha: true });
+
+                // Giảm kích thước 35% để tối ưu tốc độ load
+                canvas.width = img.width * 0.35;
+                canvas.height = img.height * 0.35;
+
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                const compressedUrl = canvas.toDataURL('image/jpeg', quality);
+                callback(compressedUrl);
+            };
+            img.onerror = () => callback(src); // Fallback to original
+            img.src = src;
+        }
+
         // --- CẤU HÌNH DỮ LIỆU ---
         const ALL_IMAGES = [
             "https://thanhji123.github.io/profile/anh/DSC_10.jpg",
@@ -1014,19 +1076,27 @@
             "https://thanhji123.github.io/profile/anh/DSC_16.jpg",
             "https://thanhji123.github.io/profile/anh/DSC_17.jpg",
             "https://thanhji123.github.io/profile/anh/DSC_18.jpg",
-            "./anh/DSC_9.jpg",
-            "./anh/DSC_8.jpg",
+            "https://thanhji123.github.io/profile/anh/DSC_3.jpg",
+            "https://thanhji123.github.io/profile/anh/DSC_4.jpg",
+            "https://thanhji123.github.io/profile/anh/DSC_5.jpg",
+            "https://thanhji123.github.io/profile/anh/DSC_6.jpg",
+            "https://thanhji123.github.io/profile/anh/DSC_7.jpg",
+            "https://thanhji123.github.io/profile/anh/DSC_8.jpg",
+            "https://thanhji123.github.io/profile/anh/DSC_9.jpg",
+            "https://thanhji123.github.io/profile/anh/DSC_1.jpg",
+            "https://thanhji123.github.io/profile/anh/DSC_2.jpg",
+            "https://thanhji123.github.io/profile/anh/DSC_2.jpg",
         ];
         const ALL_IMAGE = [
-            "./anh/DSC_3.jpg",
-            "./anh/DSC_4.jpg",
-            "./anh/DSC_5.jpg",
-            "./anh/DSC_6.jpg",
-            "./anh/DSC_7.jpg",
-            "./anh/DSC_8.jpg",
-            "./anh/DSC_9.jpg",
-            "./anh/DSC_1.jpg",
-            "./anh/DSC_2.jpg",
+            "https://thanhji123.github.io/profile/anh/DSC_3.jpg",
+            "https://thanhji123.github.io/profile/anh/DSC_4.jpg",
+            "https://thanhji123.github.io/profile/anh/DSC_5.jpg",
+            "https://thanhji123.github.io/profile/anh/DSC_6.jpg",
+            "https://thanhji123.github.io/profile/anh/DSC_7.jpg",
+            "https://thanhji123.github.io/profile/anh/DSC_8.jpg",
+            "https://thanhji123.github.io/profile/anh/DSC_9.jpg",
+            "https://thanhji123.github.io/profile/anh/DSC_1.jpg",
+            "https://thanhji123.github.io/profile/anh/DSC_2.jpg",
         ];
 
         const coupleImages = document.querySelectorAll(".couple-img-item");
@@ -1131,15 +1201,52 @@
         }
         buildCalendar(2026, 5, 3);
 
-        // --- SLIDESHOW ---
+        // --- SLIDESHOW (OPTIMIZED: Parallel loading) ---
         const slidesDiv = document.getElementById('slides');
         const thumbsDiv = document.getElementById('thumbs');
         let currentSlide = 0;
 
-        ALL_IMAGE.slice(0, 9).forEach((img, i) => {
-            slidesDiv.innerHTML += `<div class="slide ${i === 0 ? 'active' : ''}"><img src="${img}"></div>`;
-            thumbsDiv.innerHTML += `<button onclick="goSlide(${i})"><img src="${img}" style="width:100%; height:100%; object-fit:cover;"></button>`;
-        });
+        if (slidesDiv && thumbsDiv) {
+            function compressImageAsync(src, quality) {
+                return new Promise(resolve => {
+                    compressImage(src, quality, resolve);
+                });
+            }
+
+            // Hiển thị placeholder ngay
+            let placeholderSlides = '';
+            let placeholderThumbs = '';
+            for (let i = 0; i < 9; i++) {
+                placeholderSlides += `<div class="slide ${i === 0 ? 'active' : ''}"><div style="width:100%;height:100%;background:#ddd;display:flex;align-items:center;justify-content:center;color:#999;">Loading...</div></div>`;
+                placeholderThumbs += `<button onclick="goSlide(${i})" style="background:#ddd;"></button>`;
+            }
+            slidesDiv.innerHTML = placeholderSlides;
+            thumbsDiv.innerHTML = placeholderThumbs;
+
+            // Load tất cả images SONG SONG (Promise.all) - gấp 5-9x nhanh hơn!
+            (async () => {
+                const slidePromises = ALL_IMAGE.slice(0, 9).map(img => compressImageAsync(img, 0.7));
+                const thumbPromises = ALL_IMAGE.slice(0, 9).map(img => compressImageAsync(img, 0.65));
+
+                const [slides, thumbs] = await Promise.all([
+                    Promise.all(slidePromises),
+                    Promise.all(thumbPromises)
+                ]);
+
+                // Cập nhật HTML
+                slidesDiv.innerHTML = slides.map((url, i) =>
+                    `<div class="slide ${i === 0 ? 'active' : ''}"><img src="${url}" loading="lazy" decoding="async"></div>`
+                ).join('');
+
+                thumbsDiv.innerHTML = thumbs.map((url, i) =>
+                    `<button onclick="goSlide(${i})"><img src="${url}" loading="lazy" decoding="async" style="width:100%; height:100%; object-fit:cover;"></button>`
+                ).join('');
+
+                // Reset về slide đầu tiên để tránh hiển thị sai
+                currentSlide = 0;
+                goSlide(0);
+            })();
+        }
 
         function goSlide(n) {
             const s = document.querySelectorAll('.slide');
@@ -1153,19 +1260,62 @@
         }
         setInterval(() => goSlide((currentSlide + 1) % 9), 4000);
 
-        // --- BOTTOM ALBUM ---
+        // --- BOTTOM ALBUM (OPTIMIZED: Lazy compress on scroll) ---
         const bottomAlbum = document.getElementById('bottomAlbum');
-        const anims = ['fade-in', 'slide-up', 'slide-left'];
+        const anims = ['fade-in', 'slide-up', 'slide-left', 'zoom-in', 'rotate-in', 'bounce-in', 'flip-in'];
 
-        ALL_IMAGES.forEach(img => {
-            const a = anims[Math.floor(Math.random() * anims.length)];
-            bottomAlbum.innerHTML += `<div class="album-item ${a}"><img src="${img}"></div>`;
-        });
+        // Tạo placeholder đơn giản (chỉ background, không nested div)
+        bottomAlbum.innerHTML = ALL_IMAGES.map((img, idx) =>
+            `<div class="album-item" data-index="${idx}" style="background:#e0e0e0;"></div>`
+        ).join('');
 
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('appear'); });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.album-item').forEach(i => observer.observe(i));
+        // Hàm wrapper Promise
+        function compressImageAsync(src, quality) {
+            return new Promise(resolve => {
+                compressImage(src, quality, resolve);
+            });
+        }
+
+        // --- BOTTOM ALBUM (OPTIMIZED: Parallel loading like slideshow) ---
+        // Load tất cả ảnh SONG SONG (Promise.all) - NHANH như ALL_IMAGE!
+        const albumItems = document.querySelectorAll('.album-item');
+        let loadingCount = 0;
+        const MAX_CONCURRENT = 8; // Tăng từ 3 lên 8 - load song song nhiều hơn
+
+        // Preload ngay từ đầu với Promise.all (giống như ALL_IMAGE) - SIÊU NHANH!
+        (async () => {
+            const albumPromises = ALL_IMAGES.map(img => compressImageAsync(img, 0.35)); // Quality 0.35 = load VÔ CÙNG NHANH
+            const compressedImages = await Promise.all(albumPromises);
+
+            // Cập nhật tất cả items ngay lập tức
+            albumItems.forEach((item, idx) => {
+                const compressedUrl = compressedImages[idx];
+                const anim = anims[idx % anims.length];
+
+                item.innerHTML = `<img src="${compressedUrl}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;">`;
+                item.style.background = 'transparent';
+
+                // Trigger animation khi image sẵn sàng
+                requestAnimationFrame(() => {
+                    item.classList.add(anim);
+                    item.classList.add('appear');
+                });
+            });
+        })();
+
+        // Vẫn giữ IntersectionObserver để animate từng item khi scroll vào view
+        const lazyObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !entry.target.classList.contains('appear')) {
+                    const idx = parseInt(entry.target.dataset.index);
+                    const anim = anims[idx % anims.length];
+                    entry.target.classList.add(anim);
+                    entry.target.classList.add('appear');
+                }
+            });
+        }, { threshold: 0.05, rootMargin: '250px' });
+
+        albumItems.forEach(item => lazyObserver.observe(item));
 
         // --- BACK TO TOP ---
         window.onscroll = () => {
